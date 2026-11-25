@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Tiny Hunt</title>
+<style>
+html, body { margin: 0; width: 100%; height: 100%; background: #000; overflow: hidden; }
+body { display: flex; align-items: center; justify-content: center; }
+#unity-canvas {
+  display: block;
+  flex: 0 0 auto;
+  width: min(100vw, calc(100vh * 330 / 717));
+  width: min(100vw, calc(100dvh * 330 / 717));
+  height: min(100vh, calc(100vw * 717 / 330));
+  height: min(100dvh, calc(100vw * 717 / 330));
+  background: #11171F;
+  image-rendering: pixelated;
+  touch-action: none;
+}
+#status { position: fixed; left: 0; right: 0; top: 50%; text-align: center; color: #E9B85C; font: 16px monospace; }
+</style>
+</head>
+<body>
+<canvas id="unity-canvas" tabindex="-1"></canvas>
+<div id="status">LOADING 0%</div>
+<script src="Build/WebBuild.loader.js"></script>
+<script>
+var statusEl = document.getElementById("status");
+createUnityInstance(document.getElementById("unity-canvas"), {
+  dataUrl: "Build/WebBuild.data.unityweb?v=" + Date.now(),
+  frameworkUrl: "Build/WebBuild.framework.js.unityweb?v=" + Date.now(),
+  codeUrl: "Build/WebBuild.wasm.unityweb?v=" + Date.now(),
+  streamingAssetsUrl: "StreamingAssets",
+  companyName: "DefaultCompany",
+  productName: "Tiny Hunt",
+  productVersion: "1.0",
+  matchWebGLToCanvasSize: true
+}, function (p) { statusEl.textContent = "LOADING " + Math.round(p * 100) + "%"; })
+  .then(function () { statusEl.remove(); })
+  .catch(function (e) { statusEl.textContent = "FAILED: " + e; });
+</script>
+</body>
+</html>
